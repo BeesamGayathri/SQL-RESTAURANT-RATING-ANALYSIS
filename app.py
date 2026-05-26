@@ -14,7 +14,7 @@ st.set_page_config(
 # TITLE
 # -----------------------------------
 st.title("🍽️ Restaurant Consumer Analysis")
-st.markdown("SQL + Power BI + Streamlit Project")
+st.markdown("Advanced SQL Project using Streamlit")
 
 # -----------------------------------
 # LOAD DATA
@@ -22,9 +22,10 @@ st.markdown("SQL + Power BI + Streamlit Project")
 consumers = pd.read_csv("datasets/consumers.csv")
 restaurants = pd.read_csv("datasets/restaurants.csv")
 ratings = pd.read_csv("datasets/ratings.csv")
+cuisines = pd.read_csv("datasets/restaurant_cuisines.csv")
 
 # -----------------------------------
-# MERGE TABLES
+# MERGE DATA
 # -----------------------------------
 df = ratings.merge(
     restaurants,
@@ -35,7 +36,7 @@ df = ratings.merge(
 # -----------------------------------
 # KPI SECTION
 # -----------------------------------
-st.subheader("📊 Key Performance Indicators")
+st.subheader("📊 Project KPIs")
 
 col1, col2, col3 = st.columns(3)
 
@@ -55,7 +56,7 @@ col3.metric(
 )
 
 # -----------------------------------
-# SQL CONCEPTS SECTION
+# SQL CONCEPTS
 # -----------------------------------
 st.subheader("🧠 SQL Concepts Used")
 
@@ -63,7 +64,7 @@ sql_concepts = [
     "WHERE Clause",
     "GROUP BY",
     "HAVING",
-    "JOINS",
+    "INNER JOIN",
     "Subqueries",
     "CTEs",
     "Window Functions",
@@ -71,7 +72,8 @@ sql_concepts = [
     "Stored Procedures"
 ]
 
-st.write(sql_concepts)
+for concept in sql_concepts:
+    st.write("✅", concept)
 
 # -----------------------------------
 # TOP RESTAURANTS
@@ -86,19 +88,19 @@ top_restaurants = (
     .reset_index()
 )
 
-fig = px.bar(
+fig1 = px.bar(
     top_restaurants,
     x="Name",
     y="Overall_Rating",
     title="Top Rated Restaurants"
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig1, use_container_width=True)
 
 # -----------------------------------
 # CITY ANALYSIS
 # -----------------------------------
-st.subheader("📍 Ratings by City")
+st.subheader("📍 Average Ratings by City")
 
 city_rating = (
     df.groupby("City")["Overall_Rating"]
@@ -110,15 +112,38 @@ fig2 = px.pie(
     city_rating,
     names="City",
     values="Overall_Rating",
-    title="Average Rating by City"
+    title="City-wise Ratings"
 )
 
 st.plotly_chart(fig2, use_container_width=True)
 
 # -----------------------------------
+# CUISINE ANALYSIS
+# -----------------------------------
+st.subheader("🍜 Popular Cuisines")
+
+top_cuisines = (
+    cuisines["Cuisine"]
+    .value_counts()
+    .head(10)
+    .reset_index()
+)
+
+top_cuisines.columns = ["Cuisine", "Count"]
+
+fig3 = px.bar(
+    top_cuisines,
+    x="Cuisine",
+    y="Count",
+    title="Top Cuisine Types"
+)
+
+st.plotly_chart(fig3, use_container_width=True)
+
+# -----------------------------------
 # CONSUMER ANALYSIS
 # -----------------------------------
-st.subheader("👥 Consumer Budget Analysis")
+st.subheader("👥 Consumer Budget Distribution")
 
 budget_count = (
     consumers["Budget"]
@@ -128,17 +153,17 @@ budget_count = (
 
 budget_count.columns = ["Budget", "Count"]
 
-fig3 = px.bar(
+fig4 = px.bar(
     budget_count,
     x="Budget",
     y="Count",
-    title="Consumer Budget Distribution"
+    title="Budget Distribution"
 )
 
-st.plotly_chart(fig3, use_container_width=True)
+st.plotly_chart(fig4, use_container_width=True)
 
 # -----------------------------------
-# RAW DATA
+# DATA PREVIEW
 # -----------------------------------
 st.subheader("📄 Dataset Preview")
 
