@@ -2,36 +2,36 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# ---------------------------------------------------
+# =========================================================
 # PAGE CONFIGURATION
-# ---------------------------------------------------
+# =========================================================
 st.set_page_config(
     page_title="Restaurant Consumer SQL Analysis",
     page_icon="🍽️",
     layout="wide"
 )
 
-# ---------------------------------------------------
+# =========================================================
 # LOAD DATASETS
-# ---------------------------------------------------
+# =========================================================
 consumers = pd.read_csv("datasets/consumers.csv")
 restaurants = pd.read_csv("datasets/restaurants.csv")
 ratings = pd.read_csv("datasets/ratings.csv")
 cuisines = pd.read_csv("datasets/restaurant_cuisines.csv")
 preferences = pd.read_csv("datasets/consumer_preferences.csv")
 
-# ---------------------------------------------------
+# =========================================================
 # DATA MERGING
-# ---------------------------------------------------
+# =========================================================
 merged_df = ratings.merge(
     restaurants,
     on="Restaurant_ID",
     how="left"
 )
 
-# ---------------------------------------------------
+# =========================================================
 # SIDEBAR
-# ---------------------------------------------------
+# =========================================================
 st.sidebar.title("📌 Dashboard Navigation")
 
 section = st.sidebar.radio(
@@ -46,18 +46,31 @@ section = st.sidebar.radio(
     ]
 )
 
-# ---------------------------------------------------
+# =========================================================
+# HEADER IMAGE
+# =========================================================
+st.image(
+    "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
+    use_container_width=True
+)
+
+# =========================================================
 # MAIN TITLE
-# ---------------------------------------------------
+# =========================================================
 st.title("🍽️ Restaurant Consumer Analysis")
 st.markdown("### Advanced SQL Analytics Dashboard using Streamlit")
 
 st.markdown("---")
 
-# ===================================================
+# =========================================================
 # PROJECT OVERVIEW
-# ===================================================
+# =========================================================
 if section == "Project Overview":
+
+    st.image(
+        "https://images.unsplash.com/photo-1414235077428-338989a2e8c0",
+        use_container_width=True
+    )
 
     st.subheader("📖 Project Overview")
 
@@ -97,10 +110,15 @@ if section == "Project Overview":
 
     st.dataframe(dataset_df, use_container_width=True)
 
-# ===================================================
+# =========================================================
 # RESTAURANT ANALYSIS
-# ===================================================
+# =========================================================
 elif section == "Restaurant Analysis":
+
+    st.image(
+        "https://images.unsplash.com/photo-1552566626-52f8b828add9",
+        use_container_width=True
+    )
 
     st.subheader("⭐ Top Rated Restaurants")
 
@@ -163,10 +181,15 @@ elif section == "Restaurant Analysis":
 
     st.plotly_chart(fig3, use_container_width=True)
 
-# ===================================================
+# =========================================================
 # CUISINE ANALYSIS
-# ===================================================
+# =========================================================
 elif section == "Cuisine Analysis":
+
+    st.image(
+        "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+        use_container_width=True
+    )
 
     st.subheader("🍜 Most Popular Cuisines")
 
@@ -212,10 +235,15 @@ elif section == "Cuisine Analysis":
 
     st.plotly_chart(fig5, use_container_width=True)
 
-# ===================================================
+# =========================================================
 # CONSUMER ANALYSIS
-# ===================================================
+# =========================================================
 elif section == "Consumer Analysis":
+
+    st.image(
+        "https://images.unsplash.com/photo-1529156069898-49953e39b3ac",
+        use_container_width=True
+    )
 
     st.subheader("👥 Consumer Budget Distribution")
 
@@ -280,9 +308,9 @@ elif section == "Consumer Analysis":
 
     st.plotly_chart(fig8, use_container_width=True)
 
-# ===================================================
+# =========================================================
 # SQL CONCEPTS
-# ===================================================
+# =========================================================
 elif section == "SQL Concepts":
 
     st.subheader("🧠 Advanced SQL Concepts Implemented")
@@ -398,9 +426,9 @@ FROM restaurants;
 END;
 """, language="sql")
 
-# ===================================================
+# =========================================================
 # DATASET PREVIEW
-# ===================================================
+# =========================================================
 elif section == "Dataset Preview":
 
     st.subheader("📄 Consumers Dataset")
