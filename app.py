@@ -2,55 +2,80 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# -----------------------------
+# -----------------------------------
 # PAGE CONFIG
-# -----------------------------
+# -----------------------------------
 st.set_page_config(
     page_title="Restaurant Consumer Analysis",
     layout="wide"
 )
 
-st.title("🍽️ Restaurant Consumer Analysis Dashboard")
+# -----------------------------------
+# TITLE
+# -----------------------------------
+st.title("🍽️ Restaurant Consumer Analysis")
+st.markdown("SQL + Power BI + Streamlit Project")
 
-# -----------------------------
-# LOAD DATASETS
-# -----------------------------
+# -----------------------------------
+# LOAD DATA
+# -----------------------------------
 consumers = pd.read_csv("datasets/consumers.csv")
 restaurants = pd.read_csv("datasets/restaurants.csv")
 ratings = pd.read_csv("datasets/ratings.csv")
 
-# -----------------------------
-# MERGE DATA
-# -----------------------------
+# -----------------------------------
+# MERGE TABLES
+# -----------------------------------
 df = ratings.merge(
     restaurants,
     on="Restaurant_ID",
     how="left"
 )
 
-# -----------------------------
+# -----------------------------------
 # KPI SECTION
-# -----------------------------
+# -----------------------------------
+st.subheader("📊 Key Performance Indicators")
+
 col1, col2, col3 = st.columns(3)
 
 col1.metric(
     "Total Restaurants",
-    df["Name"].nunique()
+    restaurants["Restaurant_ID"].nunique()
 )
 
 col2.metric(
     "Average Rating",
-    round(df["Overall_Rating"].mean(), 2)
+    round(ratings["Overall_Rating"].mean(), 2)
 )
 
 col3.metric(
-    "Cities",
-    df["City"].nunique()
+    "Total Consumers",
+    consumers["Consumer_ID"].nunique()
 )
 
-# -----------------------------
+# -----------------------------------
+# SQL CONCEPTS SECTION
+# -----------------------------------
+st.subheader("🧠 SQL Concepts Used")
+
+sql_concepts = [
+    "WHERE Clause",
+    "GROUP BY",
+    "HAVING",
+    "JOINS",
+    "Subqueries",
+    "CTEs",
+    "Window Functions",
+    "Views",
+    "Stored Procedures"
+]
+
+st.write(sql_concepts)
+
+# -----------------------------------
 # TOP RESTAURANTS
-# -----------------------------
+# -----------------------------------
 st.subheader("⭐ Top Rated Restaurants")
 
 top_restaurants = (
@@ -70,9 +95,9 @@ fig = px.bar(
 
 st.plotly_chart(fig, use_container_width=True)
 
-# -----------------------------
+# -----------------------------------
 # CITY ANALYSIS
-# -----------------------------
+# -----------------------------------
 st.subheader("📍 Ratings by City")
 
 city_rating = (
@@ -90,9 +115,31 @@ fig2 = px.pie(
 
 st.plotly_chart(fig2, use_container_width=True)
 
-# -----------------------------
+# -----------------------------------
+# CONSUMER ANALYSIS
+# -----------------------------------
+st.subheader("👥 Consumer Budget Analysis")
+
+budget_count = (
+    consumers["Budget"]
+    .value_counts()
+    .reset_index()
+)
+
+budget_count.columns = ["Budget", "Count"]
+
+fig3 = px.bar(
+    budget_count,
+    x="Budget",
+    y="Count",
+    title="Consumer Budget Distribution"
+)
+
+st.plotly_chart(fig3, use_container_width=True)
+
+# -----------------------------------
 # RAW DATA
-# -----------------------------
+# -----------------------------------
 st.subheader("📄 Dataset Preview")
 
-st.dataframe(df.head(50))
+st.dataframe(df.head(20))
